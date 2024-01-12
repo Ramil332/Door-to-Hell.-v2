@@ -5,7 +5,30 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public int health = 100;
-    public int damage = 5;
+    public int damage = 15;
+
+    public GameObject damageEffect;
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("ZombieHand"))
+        {
+            AplyDamage();
+            damageEffect.SetActive(true);
+        }
+
+        Debug.Log("Тронула меня");
+
+        
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        health += 1;
+
+        Invoke("desableDamageEffect", 1f);
+    }
 
     public void AplyDamage()
     {
@@ -15,20 +38,13 @@ public class Player : MonoBehaviour
         {
             SceneManager.LoadScene(3);
         }
+
+
     }
 
-    void OnCollisionEnter(Collision enemy)
+    void desableDamageEffect()
     {
-        if (enemy.gameObject.tag == "Zombie")
-            health -= damage;
+        damageEffect.SetActive(false);
     }
 
-    void OnCollisionExit(Collision enemy)
-    {
-        if (enemy.gameObject.tag == "Zombie")
-            health += 1;
-            
-    }
-
-    
 }

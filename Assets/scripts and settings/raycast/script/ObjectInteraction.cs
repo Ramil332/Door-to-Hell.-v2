@@ -12,7 +12,13 @@ public class ObjectInteraction : MonoBehaviour
     public float interactionRange = 3f;
     [SerializeField] private Camera _mainCamera;
     public bool IsButtonActive = false;
+    bool isClip = true;
+    bool isClipElevOp = true;
+    bool isClipElevClosed = true;
     public Animator animator;
+    public GameObject note;
+    public GameObject interaction;
+
 
     public AudioClip openGenerator; // Звук взаимодействия
     public AudioClip openElevator; // Звук взаимодействия
@@ -53,27 +59,30 @@ public class ObjectInteraction : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, interactionRange))
             {
-                if (hit.collider.CompareTag("Panel"))
+                if (hit.collider.CompareTag("Panel") && isClip == true)
                 {
-                    InteractWithObject(hit.collider.gameObject);
+                    Invoke("InteractWithObject", 1f);
+                    PlayInteractionSound(openGenerator); // Воспроизводим звук взаимодействия
+
                 }
-                if (hit.collider.CompareTag("Button") && IsButtonActive)
+                if (hit.collider.CompareTag("Button") && IsButtonActive && isClipElevOp)
                 {
                     Invoke("OpenElevator", 4.4f);
                     PlayInteractionSound(openElevator); // Воспроизводим звук взаимодействия
+                    isClipElevOp = false;
                 }
-                if (hit.collider.CompareTag("Butto2") && IsButtonActive)
+                if (hit.collider.CompareTag("Butto2") && IsButtonActive && isClipElevClosed)
                 {
                     Invoke("ClosedElevator", 6f);
                     PlayInteractionSound(closeElevator); // Воспроизводим звук взаимодействия
+                    isClipElevClosed = false;
                 }
             }
         }
     }
 
-    void InteractWithObject(GameObject obj)
+    void InteractWithObject()
     {
-        Debug.Log("Interacted : " + obj.name);
         GameObject[] lights = GameObject.FindGameObjectsWithTag("light");
         foreach (GameObject lightObject in lights)
         {
@@ -86,7 +95,7 @@ public class ObjectInteraction : MonoBehaviour
         }
 
         IsButtonActive = true;
-        PlayInteractionSound(openGenerator); // Воспроизводим звук взаимодействия
+
     }
 
     void PlayInteractionSound(AudioClip clip)

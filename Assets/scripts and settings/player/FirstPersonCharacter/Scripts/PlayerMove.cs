@@ -80,7 +80,7 @@ public class PlayerMove : MonoBehaviour
                     velocity.y = Mathf.Sqrt(_gravity * -2 * _jumpForce);
                     JumpSound();
                 }
-                
+
             }
 
             HundleGravity();
@@ -103,6 +103,8 @@ public class PlayerMove : MonoBehaviour
         controller.Move(directionMove * _walkSpeed * Time.deltaTime);
 
         Invoke("FootStepSound", 2f);
+
+
     }
 
     void HundleGravity()
@@ -116,7 +118,7 @@ public class PlayerMove : MonoBehaviour
         if (_isGrounded && velocity.y < 0f)
         {
             velocity.y = -2;
-            
+
 
         }
     }
@@ -161,7 +163,7 @@ public class PlayerMove : MonoBehaviour
         audioSource.Play();
     }
 
-   void FootStepSound()
+    void FootStepSound()
     {
         if (controller.isGrounded && controller.velocity.magnitude > 0.1f)
         {

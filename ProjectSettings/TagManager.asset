@@ -17,6 +17,8 @@ TagManager:
   - Disco
   - Ladder
   - Zombie
+  - ZombieHand
+  - Note
   layers:
   - Default
   - TransparentFX

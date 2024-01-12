@@ -21,9 +21,9 @@ public class LadderController : MonoBehaviour
     private void Update()
     {
         float ladderInputVert = Input.GetAxis("Vertical");
-        float ladderInputHor = Input.GetAxis("Horizontal");
+      
 
-        Vector3 moveDir = new Vector3(ladderInputHor, ladderInputVert, 0).normalized;
+        Vector3 moveDir = new Vector3(0, ladderInputVert, 0).normalized;
 
         if (_isClimbing)
             _characterController.Move(moveDir * _climbSpeed * Time.deltaTime);
