@@ -20,8 +20,8 @@ public class PlayerMove : MonoBehaviour
 
     //параметры скорости
     [Header("Speed Parameters")]
-    [SerializeField] float _walkSpeed = 2f;
-    [SerializeField] float _runSpeed = 4f;
+    [SerializeField] float _walkSpeed;
+    [SerializeField] float _runSpeed;
     [SerializeField] float _crouchSpeed;
 
     //начальная скорость
@@ -100,7 +100,7 @@ public class PlayerMove : MonoBehaviour
 
         directionMove = (transform.forward * vertical + transform.right * horizontal).normalized;
 
-        controller.Move(directionMove * _walkSpeed * Time.deltaTime);
+        controller.Move(directionMove * _currentSpeed * Time.deltaTime);
 
         Invoke("FootStepSound", 2f);
 
@@ -125,8 +125,8 @@ public class PlayerMove : MonoBehaviour
 
     void Sprint(bool canSprint)
     {
-        _currentSpeed = 2f;
-        _walkSpeed = canSprint ? _runSpeed : _currentSpeed;
+        //_currentSpeed = 2f;
+        _currentSpeed = canSprint ? _runSpeed : _walkSpeed;
     }
 
     void Crouch(bool canCrouch)
