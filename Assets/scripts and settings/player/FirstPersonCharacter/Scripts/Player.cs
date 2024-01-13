@@ -17,10 +17,6 @@ public class Player : MonoBehaviour
             AplyDamage();
             damageEffect.SetActive(true);
         }
-
-        Debug.Log("Тронула меня");
-
-        
     }
 
     private void OnTriggerExit(Collider other)

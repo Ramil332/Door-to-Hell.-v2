@@ -7,6 +7,10 @@ using UnityEngine;
 
 public class Notes : MonoBehaviour
 {
+    private void Awake()
+    {
+        Time.timeScale = 0f;
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.C)) 
@@ -15,6 +19,8 @@ public class Notes : MonoBehaviour
             {
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
+                Time.timeScale = 1f;
+
                 Destroy(transform.parent.gameObject); 
             }
         }

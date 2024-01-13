@@ -7,22 +7,17 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    Player mainPlayer;
     private NavMeshAgent agent;
     public Transform[] waypoints;
-    public Transform targetToFollow;
     public float followRadius = 10f;
     public Animator animator;
-    public GameObject player;
+    private GameObject player;
     bool isAttacking;
-    bool IsMovingToRandomPoint;
     public float AttackRange = 3f;
     int randomIndex;
-    public float TimeSetRandomPoint = 1.0f;
     void Start()
     {
         randomIndex = 0;
-        IsMovingToRandomPoint = false;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -36,11 +31,9 @@ public class EnemyMovement : MonoBehaviour
             {
                 animator.SetBool("Walk", true);
                 agent.SetDestination(waypoints[randomIndex].position);
-                IsMovingToRandomPoint = true;
             }
             else
             {
-                IsMovingToRandomPoint = false;
                 randomIndex = Random.Range(0, waypoints.Length);
             }
         }
@@ -48,7 +41,6 @@ public class EnemyMovement : MonoBehaviour
     void StartAttackAnimation()
     {
         isAttacking = true;
-        Debug.Log("Atack");
         animator.SetTrigger("Attack");
     }
     void IsAttacked()
@@ -57,39 +49,38 @@ public class EnemyMovement : MonoBehaviour
     }
     void Update()
     {
-        if (targetToFollow != null)
+        if (!isAttacking)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, targetToFollow.position);
-            if (distanceToPlayer <= followRadius)
+            if (Vector3.Distance(transform.position, player.transform.position) <= AttackRange)
             {
+                animator.SetBool("Walk", false);
+                StartAttackAnimation();
+            }
+            else
+                MoveToTarget();
 
-                if (distanceToPlayer > AttackRange && !isAttacking)
-                {
-                    IsMovingToRandomPoint = false;
-                    agent.SetDestination(targetToFollow.position);
-                    animator.SetBool("Walk", true);
-                }
-                else
-                {
-                    animator.SetBool("Walk", false);
-                    StartAttackAnimation();
-                }
+        }
+    }
 
+    private void MoveToTarget()
+    {
+        animator.SetBool("Walk", true);
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+        if (distanceToPlayer <= followRadius)
+        {
+            agent.SetDestination(player.transform.position);
+        }
+        else
+        {
+            if (agent.remainingDistance < agent.stoppingDistance)
+            {
+                agent.SetDestination(waypoints[randomIndex].position);
             }
             else
             {
-                if (agent.remainingDistance < agent.stoppingDistance)
-                {
-                    animator.SetBool("Walk", true);
-                    agent.SetDestination(waypoints[randomIndex].position);
-
-                }
-                else
-                {
-                    randomIndex = Random.Range(0, waypoints.Length);
-                }
+                randomIndex = Random.Range(0, waypoints.Length);
             }
-
         }
 
     }

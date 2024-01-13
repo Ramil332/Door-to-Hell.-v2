@@ -51,7 +51,7 @@ public class PlayerRaycast : MonoBehaviour
 
         else
         {
-            Debug.Log("No hit");
+           // Debug.Log("No hit");
             Lkm.SetActive(false);
         }
         if (h.collider?.CompareTag("Panel") == true || h.collider?.CompareTag("Button") == true || h.collider?.CompareTag("Butto2") == true)
